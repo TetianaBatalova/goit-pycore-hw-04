@@ -1,13 +1,15 @@
-def parse_input(user_input):
+def parse_input(user_input: str) -> tuple[str, list[str]]:
     """Розбирає введений рядок на команду та аргументи."""
     if not user_input.strip():
         return "invalid", []
+    
+    # Використовуємо split(), cmd отримує перше слово, args — решту
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
-    return cmd, *args
+    return cmd, args
 
 
-def add_contact(args, contacts):
+def add_contact(args: list[str], contacts: dict[str, str]) -> str:
     """Додає новий контакт або перезаписує існуючий."""
     if len(args) < 2:
         return "Error: Give me name and phone please."
@@ -16,7 +18,7 @@ def add_contact(args, contacts):
     return "Contact added."
 
 
-def change_contact(args, contacts):
+def change_contact(args: list[str], contacts: dict[str, str]) -> str:
     """Оновлює номер телефону для існуючого контакту."""
     if len(args) < 2:
         return "Error: Give me name and phone please."
@@ -28,7 +30,7 @@ def change_contact(args, contacts):
         return f"Error: Contact '{name}' not found."
 
 
-def show_phone(args, contacts):
+def show_phone(args: list[str], contacts: dict[str, str]) -> str:
     """Виводить номер телефону за ім'ям."""
     if len(args) < 1:
         return "Error: Enter user name."
@@ -39,21 +41,25 @@ def show_phone(args, contacts):
         return f"Error: Contact '{name}' not found."
 
 
-def show_all(contacts):
+def show_all(contacts: dict[str, str]) -> str:
     """Виводить усі збережені контакти."""
     if not contacts:
         return "No contacts stored."
-    return "\n".join([f"{name}: {phone}" for name, phone in contacts.items()])
+    
+    # Створюємо список рядків для виводу
+    contact_list: list[str] = [f"{name}: {phone}" for name, phone in contacts.items()]
+    return "\n".join(contact_list)
 
 
-def main():
+def main() -> None:
     """Основний цикл управління ботом."""
-    contacts = {}
+    # Ініціалізуємо порожній словник з анотацією типів
+    contacts: dict[str, str] = {}
     print("Welcome to the assistant bot!")
 
     while True:
-        user_input = input("Enter a command: ")
-        command, *args = parse_input(user_input)
+        user_input: str = input("Enter a command: ")
+        command, args = parse_input(user_input)
 
         if command in ["close", "exit"]:
             print("Good bye!")
